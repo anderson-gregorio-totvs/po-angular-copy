@@ -38,7 +38,7 @@ jobs:
         path: po-tslint
 
     - name: Install and Build
-      run: npm install && npm run build
+      run: npm install && npm run build:ui
       working-directory: ${{env.WORKING_DIR}}
 
     # Pega a última versão dos pacotes publicados no npm e armazena em variáveis
