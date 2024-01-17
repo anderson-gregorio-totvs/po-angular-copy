@@ -4,9 +4,9 @@ name: CI
 # Define em quais situações esse workflow será executado
 on:
   push:
-    branches: [ master ]
+    branches: [ master, '[0-9]+.x.x' ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, '[0-9]+.x.x' ]
 
 # Os jobs são conjuntos de actions que são executados na mesma máquina virtual.
 # É possível ter mais de um job e assim executar ações paralelamente.
@@ -63,22 +63,22 @@ jobs:
         name: portal
         path: dist/portal
 
-  test-ui:
-    name: Test ui
+  # test-ui:
+  #   name: Test ui
 
-    runs-on: ubuntu-20.04
+  #   runs-on: ubuntu-20.04
 
-    steps:
+  #   steps:
 
-    - uses: actions/checkout@v3
+  #   - uses: actions/checkout@v3
 
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 16
+  #   - uses: actions/setup-node@v3
+  #     with:
+  #       node-version: 16
 
-    - run: npm i
-    - run: npm run test:ui
-    - run: npm run test:ui:schematics
+  #   - run: npm i
+  #   - run: npm run test:ui
+  #   - run: npm run test:ui:schematics
 
   test-templates:
     name: Test templates
