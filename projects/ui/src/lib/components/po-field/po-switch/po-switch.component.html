@@ -1,0 +1,34 @@
+<po-field-container [p-disabled]="disabled" [p-id]="id" [p-label]="label">
+  <div class="po-field-container-content" [attr.name]="name">
+    <div class="po-switch" [attr.data-label-position]="getLabelPosition()">
+      <div
+        #switchContainer
+        class="po-switch-container"
+        role="switch"
+        [attr.aria-checked]="value"
+        [attr.aria-disabled]="disabled"
+        [id]="id"
+        [tabindex]="disabled ? -1 : 0"
+        (blur)="onBlur()"
+        (click)="eventClick()"
+        (keydown)="onKeyDown($event)"
+      >
+        <div class="po-switch-track">
+          <div class="po-switch-toggle" [attr.aria-label]="value === true ? labelOn : labelOff">
+            <po-icon *ngIf="value === true" class="po-switch-icon" p-icon="po-icon-ok"></po-icon>
+          </div>
+        </div>
+      </div>
+
+      <po-label
+        *ngIf="label"
+        [p-disabled]="disabled"
+        [p-label]="value === true ? labelOn : labelOff"
+        (click)="eventClick()"
+      >
+      </po-label>
+    </div>
+  </div>
+
+  <po-field-container-bottom [p-help]="help" [p-disabled]="disabled"></po-field-container-bottom>
+</po-field-container>

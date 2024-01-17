@@ -1,0 +1,105 @@
+<po-field-container
+  [p-disabled]="disabled"
+  [p-id]="id"
+  [p-label]="label"
+  [p-optional]="optional"
+  [p-required]="required"
+  [p-show-required]="showRequired"
+>
+  <div cdkOverlayOrigin #trigger="cdkOverlayOrigin" class="po-field-container-content po-combo-container-content">
+    <div *ngIf="icon" class="po-field-icon-container-left">
+      <po-icon class="po-field-icon po-icon-input" [class.po-field-icon-disabled]="disabled" [p-icon]="icon"></po-icon>
+    </div>
+
+    <input
+      #inp
+      class="po-combo-input"
+      [ngClass]="clean && inp.value ? 'po-input-double-icon-right' : 'po-input-icon-right'"
+      [class.po-input-icon-left]="icon"
+      autocomplete="off"
+      type="text"
+      [attr.name]="name"
+      [disabled]="disabled"
+      [id]="id"
+      [placeholder]="disabled ? '' : placeholder"
+      [required]="required"
+      (click)="toggleComboVisibility()"
+      (keyup)="onKeyUp($event)"
+      (blur)="onBlur()"
+      (keyup)="searchOnEnterOrArrow($event, $event.target.value)"
+      (keydown)="onKeyDown($event)"
+    />
+
+    <div class="po-field-icon-container-right">
+      <div
+        tabindex="0"
+        role="button"
+        [attr.aria-label]="literals.clean"
+        *ngIf="clean && !disabled && inp.value"
+        class="po-combo-clean"
+        (click)="clear(null); $event.preventDefault()"
+        (keydown.enter)="clearAndFocus(); $event.preventDefault()"
+      >
+        <span
+          [class.po-border-focused]="!disabled && comboOpen"
+          class="po-icon po-field-icon po-icon-clear-content"
+        ></span>
+      </div>
+      <span
+        #iconArrow
+        class="po-icon po-field-icon po-icon-input"
+        [class.po-field-icon-disabled]="disabled"
+        [class.po-icon-arrow-up]="comboOpen"
+        [class.po-icon-arrow-down]="!comboOpen"
+        [class.po-field-icon]="!disabled"
+        [class.po-combo-default-border]="!disabled && inp.value"
+        [class.po-combo-background-arrow-up]="!disabled && comboOpen"
+        (click)="toggleComboVisibility(true)"
+      >
+      </span>
+    </div>
+  </div>
+
+  <ng-container *ngIf="appendBox; then dropdownCDK; else dropdownDefault"> </ng-container>
+
+  <ng-template #dropdownDefault>
+    <ng-container *ngTemplateOutlet="dropdownListbox"> </ng-container>
+  </ng-template>
+
+  <ng-template #dropdownCDK>
+    <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="true">
+      <ng-container *ngTemplateOutlet="dropdownListbox"></ng-container>
+    </ng-template>
+  </ng-template>
+
+  <po-field-container-bottom [p-help]="help" [p-disabled]="disabled"></po-field-container-bottom>
+</po-field-container>
+
+<ng-template #dropdownListbox>
+  <div #containerElement class="po-combo-container" [hidden]="!comboOpen && !isServerSearching">
+    <po-listbox
+      #poListbox
+      #contentElement
+      p-type="option"
+      [p-items]="visibleOptions"
+      [p-field-value]="dynamicValue"
+      [p-field-label]="dynamicLabel"
+      [p-template]="comboOptionTemplate"
+      [p-search-value]="getInputValue()"
+      [p-infinite-loading]="infiniteLoading"
+      [p-infinite-scroll]="infiniteScroll"
+      [p-filtering]="isFiltering"
+      [p-cache]="cache"
+      (p-selectcombo-item)="onOptionClick($event, $event.event)"
+      [p-filter-mode]="filterMode"
+      [p-visible]="comboOpen"
+      [p-is-searching]="isServerSearching"
+      [p-should-mark-letter]="shouldMarkLetters"
+      [p-compare-cache]="compareObjects(cacheOptions, visibleOptions)"
+      [p-combo-service]="service"
+      [p-infinite-scroll-distance]="infiniteScrollDistance"
+      (p-update-infinite-scroll)="showMoreInfiniteScroll()"
+      (p-close)="onCloseCombo()"
+    ></po-listbox>
+  </div>
+</ng-template>

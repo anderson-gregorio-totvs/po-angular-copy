@@ -1,0 +1,28 @@
+<div #container class="po-multiselect-container" [hidden]="!show">
+  <div [scrollTop]="scrollTop" #divElement>
+    <ng-container>
+      <po-listbox
+        #listbox
+        p-type="check"
+        [p-items]="visibleOptions"
+        [p-selected-options]="selectedOptions"
+        [p-checkboxAllValue]="getStateSelectAll()"
+        [p-field-value]="fieldValue"
+        [p-field-value-search]="fieldValue"
+        [p-field-label]="fieldLabel"
+        [p-literal-search]="literals"
+        [p-literals]="literals"
+        [p-is-searching]="isServerSearching"
+        [p-hide-search]="hideSearch"
+        [p-hide-select-all]="hideSelectAll"
+        [p-template]="multiselectTemplate"
+        [p-placeholder-search]="placeholderSearch"
+        (p-change)="clickItem($event)"
+        (p-change-all)="onClickSelectAll()"
+        (p-change-search)="callChangeSearch($event)"
+        (p-close)="closeDropdown.emit()"
+      >
+      </po-listbox>
+    </ng-container>
+  </div>
+</div>
