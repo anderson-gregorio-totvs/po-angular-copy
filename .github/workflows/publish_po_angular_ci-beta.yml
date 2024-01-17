@@ -1,4 +1,4 @@
-name: PO-UI Publish Latest
+name: PO-UI Publish Beta
 
 # URL para os pacotes po-ui no npm
 env:
