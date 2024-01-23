@@ -56,7 +56,7 @@ jobs:
         fi
 
     - name: ECHO
-      run: echo "${{ steps }}"
+      run: echo "${{ JSON.stringify(steps) }}"
 
     - name: Publicar no NPM
       if: contains(steps.outputs.publish, 'yes')
