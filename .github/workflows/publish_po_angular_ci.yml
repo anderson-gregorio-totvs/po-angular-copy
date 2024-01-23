@@ -1,15 +1,7 @@
 name: PO-UI Publish Next
 
-# URL para os pacotes po-ui no npm
 env:
-  # SCHEMATICS_NPM_PATH: po-ui/ng-schematics
-  # STORAGE_NPM_PATH: po-ui/ng-storage
-  # SYNC_NPM_PATH: po-ui/ng-sync
-  COMPONENTS_NPM_PATH: po-ui/ng-components
-  # TEMPLATES_NPM_PATH: po-ui/ng-templates
-  # CODE_EDITOR_NPM_PATH: po-ui/ng-code-editor
-  # AZURE_WEBAPP_NAME: wa-po-ui
-  # AZURE_WEBAPP_PACKAGE_PATH: /home/runner/work/po-angular/po-angular/po-angular/dist/portal
+  COMPONENTS_NPM_PATH: teste2-poui-deploy/ng-components
   WORKING_DIR: /home/runner/work/po-angular-copy/po-angular-copy/po-angular
 
 on:
@@ -42,12 +34,10 @@ jobs:
       working-directory: ${{env.WORKING_DIR}}
 
     # Pega a última versão dos pacotes publicados no npm e armazena em variáveis
-    # - run: echo "SCHEMATICS_LAST_PUBLISHED_VERSION=$(npm view @${{ env.SCHEMATICS_NPM_PATH }} dist-tags.next)" >> $GITHUB_ENV
-    # - run: echo "STORAGE_LAST_PUBLISHED_VERSION=$(npm view @${{ env.STORAGE_NPM_PATH }} dist-tags.next)" >> $GITHUB_ENV
-    # - run: echo "SYNC_LAST_PUBLISHED_VERSION=$(npm view @${{ env.SYNC_NPM_PATH }} dist-tags.next)" >> $GITHUB_ENV
     - run: echo "COMPONENTS_LAST_PUBLISHED_VERSION=$(npm view @${{ env.COMPONENTS_NPM_PATH }} dist-tags.next)" >> $GITHUB_ENV
-    # - run: echo "TEMPLATES_LAST_PUBLISHED_VERSION=$(npm view @${{ env.TEMPLATES_NPM_PATH }} dist-tags.next)" >> $GITHUB_ENV
-    # - run: echo "CODE_EDITOR_LAST_PUBLISHED_VERSION=$(npm view @${{ env.CODE_EDITOR_NPM_PATH }} dist-tags.next)" >> $GITHUB_ENV
+
+    - name: Obter todas as versões publicadas
+      run: npm show @${{ env.COMPONENTS_NPM_PATH }} versions --json > versions.json
 
     # Pega a versão no package.json
     - name: Get package.json version.
@@ -56,87 +46,23 @@ jobs:
       with:
         path: po-angular
 
-    # # PUBLISH NG-SCHEMATICS
-    # - name: ng-schematics - publish
-    #   # Se a versão remota for igual à versão que será publicada então ele pula o publish deste pacote e tenta publicar os demais pacotes
-    #   if: (!contains(env.PACKAGE_VERSION, env.SCHEMATICS_LAST_PUBLISHED_VERSION))
+    - name: Verificar se a versão existe
+      run: |
+        VERSION_TO_CHECK=${{ steps.package-version.outputs.current-version }}
+        if jq -e --arg version "$VERSION_TO_CHECK" '.[] | select(. == $version)' versions.json; then
+          echo "A versão $VERSION_TO_CHECK existe no arquivo JSON."
+        else
+          echo "A versão $VERSION_TO_CHECK não existe no arquivo JSON."
+        fi
+
+    # # PUBLISH NG-COMPONENTS
+    # - name: ng-components - publish
+    #   if: (!contains(env.PACKAGE_VERSION, env.COMPONENTS_LAST_PUBLISHED_VERSION))
     #   uses: actions/setup-node@v3
     #   with:
     #     node-version: '16.x'
     #     registry-url: 'https://registry.npmjs.org'
-    # - run: npm publish ${{env.WORKING_DIR}}/dist/ng-schematics --tag next --ignore-scripts
+    # - run: npm publish ${{env.WORKING_DIR}}/dist/ng-components --tag next --ignore-scripts
     #   env:
     #     PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
     #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-    # # PUBLISH NG-STORAGE
-    # - name: ng-storage - publish
-    #   if: (!contains(env.PACKAGE_VERSION, env.STORAGE_LAST_PUBLISHED_VERSION))
-    #   uses: actions/setup-node@v3
-    #   with:
-    #     node-version: '16.x'
-    #     registry-url: 'https://registry.npmjs.org'
-    # - run: npm publish ${{env.WORKING_DIR}}/dist/ng-storage --tag next --ignore-scripts
-    #   env:
-    #     PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
-    #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-    # # PUBLISH NG-SYNC
-    # - name: ng-sync - publish
-    #   if: (!contains(env.PACKAGE_VERSION, env.SYNC_LAST_PUBLISHED_VERSION))
-    #   uses: actions/setup-node@v3
-    #   with:
-    #     node-version: '16.x'
-    #     registry-url: 'https://registry.npmjs.org'
-    # - run: npm publish ${{env.WORKING_DIR}}/dist/ng-sync --tag next --ignore-scripts
-    #   env:
-    #     PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
-    #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-    # PUBLISH NG-COMPONENTS
-    - name: ng-components - publish
-      if: (!contains(env.PACKAGE_VERSION, env.COMPONENTS_LAST_PUBLISHED_VERSION))
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16.x'
-        registry-url: 'https://registry.npmjs.org'
-    - run: npm publish ${{env.WORKING_DIR}}/dist/ng-components --tag next --ignore-scripts
-      env:
-        PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-    # # PUBLISH NG-TEMPLATES
-    # - name: ng-templates - publish
-    #   if: (!contains(env.PACKAGE_VERSION, env.TEMPLATES_LAST_PUBLISHED_VERSION))
-    #   uses: actions/setup-node@v3
-    #   with:
-    #     node-version: '16.x'
-    #     registry-url: 'https://registry.npmjs.org'
-    # - run: npm publish ${{env.WORKING_DIR}}/dist/ng-templates --tag next --ignore-scripts
-    #   env:
-    #     PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
-    #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-    # # PUBLISH NG-CODE-EDITOR
-    # - name: ng-code-editor - publish
-    #   if: (!contains(env.PACKAGE_VERSION, env.CODE_EDITOR_LAST_PUBLISHED_VERSION))
-    #   uses: actions/setup-node@v3
-    #   with:
-    #     node-version: '16.x'
-    #     registry-url: 'https://registry.npmjs.org'
-    # - run: npm publish ${{env.WORKING_DIR}}/dist/ng-code-editor --tag next --ignore-scripts
-    #   env:
-    #     PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
-    #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-    # # PUBLISH PORTAL
-    # - name: portal build
-    #   run: npm run build:portal:docs && npm run build:portal:prod
-    #   working-directory: ${{env.WORKING_DIR}}
-
-    # - name: 'Deploy to Azure Web App'
-    #   uses: azure/webapps-deploy@v2
-    #   with:
-    #     app-name: ${{ env.AZURE_WEBAPP_NAME }}
-    #     package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-    #     publish-profile: ${{ secrets.AZURE_TOKEN }}
