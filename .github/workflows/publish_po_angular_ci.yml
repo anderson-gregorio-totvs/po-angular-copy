@@ -55,6 +55,9 @@ jobs:
           echo "publish='no'" >> $GITHUB_OUTPUT
         fi
 
+    - name: ECHO
+      run: echo "$steps"
+
     - name: Publicar no NPM
       if: contains(steps.outputs.publish, 'yes')
       run: echo "A publicação seria realizda!"
