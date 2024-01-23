@@ -64,11 +64,11 @@ jobs:
         echo "${{ toJSON(env) }}"
 
     - name: Publicar no NPM
-      if: contains(steps.outputs.publish, 'yes')
+      if: contains(steps.version.outputs.publish, 'yes')
       run: echo "A publicação seria realizda!"
 
     - name: Adicionar tag no NPM
-      if: contains(steps.outputs.publish, 'no')
+      if: contains(steps.version.outputs.publish, 'no')
       run: echo "Adicionar a tag seria realizda!"
 
     # # PUBLISH NG-COMPONENTS
