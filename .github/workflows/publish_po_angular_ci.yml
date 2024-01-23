@@ -47,12 +47,15 @@ jobs:
         path: po-angular
 
     - name: Verificar se a versão existe
+      id: version
       run: |
         VERSION_TO_CHECK=${{ steps.package-version.outputs.current-version }}
         if jq -e --arg version "$VERSION_TO_CHECK" '.[] | select(. == $version)' versions.json; then
           echo "publish='yes'" >> $GITHUB_ENV
+          echo "publish='yes'" >> GITHUB_OUTPUT
         else
           echo "publish='no'" >> $GITHUB_ENV
+          echo "publish='no'" >> GITHUB_OUTPUT
         fi
 
     - name: ECHO
