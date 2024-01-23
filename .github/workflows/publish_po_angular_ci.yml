@@ -56,7 +56,9 @@ jobs:
         fi
 
     - name: ECHO
-      run: echo "${{ toJSON(steps) }}"
+      run: |
+        echo "${{ toJSON(steps) }}"
+        echo "${{ toJSON(env) }}"
 
     - name: Publicar no NPM
       if: contains(steps.outputs.publish, 'yes')
