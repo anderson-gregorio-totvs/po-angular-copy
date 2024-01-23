@@ -55,13 +55,13 @@ jobs:
           echo "::set-output name=publish::no"
         fi
 
-      # - name: Publicar no NPM
-      #   if: (env.PUBLISH == 'true')
-      #   run: echo "A publicação seria realizda!"
+      - name: Publicar no NPM
+        if: contains(steps.outputs.test, 'yes')
+        run: echo "A publicação seria realizda!"
 
-      # - name: Adicionar tag no NPM
-      #   if: (env.PUBLISH == 'false')
-      #   run: echo "Adicionar a tag seria realizda!"
+      - name: Adicionar tag no NPM
+        if: contains(steps.outputs.test, 'no')
+        run: echo "Adicionar a tag seria realizda!"
 
     # # PUBLISH NG-COMPONENTS
     # - name: ng-components - publish
