@@ -50,9 +50,9 @@ jobs:
       run: |
         VERSION_TO_CHECK=${{ steps.package-version.outputs.current-version }}
         if jq -e --arg version "$VERSION_TO_CHECK" '.[] | select(. == $version)' versions.json; then
-          echo "::set-output name=publish::yes"
+          echo "publish='yes'" >> $GITHUB_OUTPUT
         else
-          echo "::set-output name=publish::no"
+          echo "publish='no'" >> $GITHUB_OUTPUT
         fi
 
     - name: Publicar no NPM
