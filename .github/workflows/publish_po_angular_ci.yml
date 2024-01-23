@@ -50,18 +50,18 @@ jobs:
       run: |
         VERSION_TO_CHECK=${{ steps.package-version.outputs.current-version }}
         if jq -e --arg version "$VERSION_TO_CHECK" '.[] | select(. == $version)' versions.json; then
-          echo "PUBLISH='false'" >> $GITHUB_ENV
+          echo "::set-output name=publish::yes"
         else
-          echo "PUBLISH='true'" >> $GITHUB_ENV
+          echo "::set-output name=publish::no"
         fi
 
-      - name: Publicar no NPM
-        if: (env.PUBLISH == 'true')
-        run: echo "A publicação seria realizda!"
+      # - name: Publicar no NPM
+      #   if: (env.PUBLISH == 'true')
+      #   run: echo "A publicação seria realizda!"
 
-      - name: Adicionar tag no NPM
-        if: (env.PUBLISH == 'false')
-        run: echo "Adicionar a tag seria realizda!"
+      # - name: Adicionar tag no NPM
+      #   if: (env.PUBLISH == 'false')
+      #   run: echo "Adicionar a tag seria realizda!"
 
     # # PUBLISH NG-COMPONENTS
     # - name: ng-components - publish
