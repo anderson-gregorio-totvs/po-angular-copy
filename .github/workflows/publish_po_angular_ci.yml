@@ -76,7 +76,7 @@ jobs:
 
     - name: ng-components - add "next" tag
       if: contains(steps.version.outputs.publish, 'no')
-      run: npm dist-tags add @${{ env.COMPONENTS_NPM_PATH }}@${{ env.PACKAGE_VERSION }}
+      run: npm dist-tags add @${{ env.COMPONENTS_NPM_PATH }}@${{ env.PACKAGE_VERSION }} "next"
       working-directory: ${{env.WORKING_DIR}}
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
