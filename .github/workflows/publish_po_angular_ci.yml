@@ -11,6 +11,10 @@ jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     steps:
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+        registry-url: 'https://registry.npmjs.org'
 
     - name: Check out po-angular
       uses: actions/checkout@v4
@@ -65,10 +69,6 @@ jobs:
     # PUBLISH NG-COMPONENTS
     - name: ng-components - publish
       if: contains(steps.version.outputs.publish, 'yes')
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16.x'
-        registry-url: 'https://registry.npmjs.org'
       run: npm publish ${{env.WORKING_DIR}}/dist/ng-components --tag next --ignore-scripts
       env:
         PACKAGE_VERSION: ${{ steps.package-version.outputs.current-version }}
