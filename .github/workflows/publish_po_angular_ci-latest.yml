@@ -37,9 +37,7 @@ jobs:
       run: npm install && npm run build:ui
       working-directory: ${{env.WORKING_DIR}}
 
-    # Pega a última versão dos pacotes publicados no npm e armazena em variáveis
-    - run: echo "COMPONENTS_LAST_PUBLISHED_VERSION=$(npm view @${{ env.COMPONENTS_NPM_PATH }} dist-tags.latest)" >> $GITHUB_ENV
-
+    # Pega as versões publicadas no NPM e salva no arquivo versions.json
     - name: Obter todas as versões publicadas
       run: npm show @${{ env.COMPONENTS_NPM_PATH }} versions --json > versions.json
 
@@ -50,6 +48,7 @@ jobs:
       with:
         path: po-angular
 
+    # Verifica se a versão a ser publicada já existe no NPM
     - name: Verificar se a versão existe
       id: version
       run: |
@@ -59,12 +58,6 @@ jobs:
         else
           echo "publish=yes" >> "$GITHUB_OUTPUT"
         fi
-
-    # DEBUG
-    - name: ECHO
-      run: |
-        echo "${{ toJSON(steps) }}"
-        echo "${{ toJSON(env) }}"
 
     # PUBLISH NG-COMPONENTS
     - name: ng-components - publish
