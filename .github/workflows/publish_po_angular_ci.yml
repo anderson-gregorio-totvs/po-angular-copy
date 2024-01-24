@@ -51,9 +51,9 @@ jobs:
       run: |
         VERSION_TO_CHECK=${{ steps.package-version.outputs.current-version }}
         if jq -e --arg version "$VERSION_TO_CHECK" '.[] | select(. == $version)' versions.json; then
-          echo "publish=yes" >> "$GITHUB_OUTPUT"
-        else
           echo "publish=no" >> "$GITHUB_OUTPUT"
+        else
+          echo "publish=yes" >> "$GITHUB_OUTPUT"
         fi
 
     - name: ECHO
