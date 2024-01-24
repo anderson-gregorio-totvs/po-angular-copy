@@ -11,10 +11,10 @@ jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     steps:
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16.x'
-        registry-url: 'https://registry.npmjs.org'
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+          registry-url: 'https://registry.npmjs.org'
 
     - name: Check out po-angular
       uses: actions/checkout@v4
