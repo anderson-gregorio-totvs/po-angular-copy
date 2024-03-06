@@ -39,7 +39,7 @@ jobs:
         path: po-tslint
 
     - name: Update Version
-      run: node ./../../scripts/update-version.js ${{ github.event.inputs.versao-beta }} ${{ github.event.inputs.versao-po-style }}
+      run: node ./scripts/update-version.js ${{ github.event.inputs.versao-beta }} ${{ github.event.inputs.versao-po-style }}
       working-directory: ${{env.WORKING_DIR}}
 
     - name: Install and Build
