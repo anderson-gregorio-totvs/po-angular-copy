@@ -6,6 +6,11 @@ env:
 
 on:
   workflow_dispatch:
+    input:
+      versao-beta:
+        required: true
+      versao-po-style:
+        required: true
 
 jobs:
   build-and-publish:
@@ -32,6 +37,10 @@ jobs:
       with:
         repository: po-ui/po-tslint
         path: po-tslint
+
+    - name: Update Version
+      run: node ./../../scripts/update-version.js ${{ github.event.inputs.versao-beta }} ${{ github.event.inputs.versao-po-style }}
+      working-directory: ${{env.WORKING_DIR}}
 
     - name: Install and Build
       run: npm install && npm run build:ui
