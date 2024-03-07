@@ -8,8 +8,10 @@ on:
   workflow_dispatch:
     inputs:
       versao-beta:
+        description: Informe a versão do Beta do PO-UI
         required: true
       versao-po-style:
+        description: Informe a versão do @po-ui/style
         required: true
 
 jobs:
