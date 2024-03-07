@@ -17,6 +17,7 @@ on:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/development'
     steps:
     - uses: actions/setup-node@v3
       with:
