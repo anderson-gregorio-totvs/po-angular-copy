@@ -10,9 +10,6 @@ on:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write  # Required for OIDC (Trusted Publishing)
-      contents: read
 
     steps:
     - uses: actions/setup-node@v3
@@ -66,7 +63,9 @@ jobs:
     # PUBLISH NG-COMPONENTS
     - name: ng-components - publish
       if: contains(steps.version.outputs.publish, 'yes')
-      run: npm publish ${{env.WORKING_DIR}}/dist/ng-components --tag next --ignore-scripts --provenance
+      run: npm publish ${{env.WORKING_DIR}}/dist/ng-components --tag next --ignore-scripts
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_GRANULAR }}
 
     - name: ng-components - add "next" tag
       if: contains(steps.version.outputs.publish, 'no')
