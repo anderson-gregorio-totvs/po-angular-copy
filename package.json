@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/po-ui/po-angular"
+    "url": "https://github.com/anderson-gregorio-totvs/po-angular-copy"
   },
   "scripts": {
     "ng": "ng",
